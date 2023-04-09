@@ -39,7 +39,7 @@ public class Program
 
     public PointDouble[] CreateRegularPolygonPointContainer(PointDouble center, double circumCircleRadius, int totalSides)
     {
-        // CircumCircle, InCircle, CircumCenter, InCenter.
+        // CircumCircle, InCircle, CircumCenter, InCenter, CircumRadius, InRadius.
         var pointContainer = new PointDouble[totalSides];
         var centralAngleRadian = 2 * Math.PI / totalSides;
 
