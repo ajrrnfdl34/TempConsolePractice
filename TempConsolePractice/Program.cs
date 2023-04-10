@@ -73,13 +73,15 @@ public class Program
 
     public PointDouble RotatePoint(PointDouble point, PointDouble center, double angleRadian)
     {
+        var translatedX = point.X - center.X;
+        var translatedY = point.Y - center.Y;
         var cos = Math.Cos(angleRadian);
         var sin = Math.Sin(angleRadian);
 
-        var rotatedX = (point.X - center.X) * cos - (point.Y - center.Y) * sin + center.X;
-        var rotatedY = (point.X - center.X) * sin + (point.Y - center.Y) * cos + center.Y;
+        var rotatedX = translatedX * cos - translatedY * sin + center.X;
+        var rotatedY = translatedX * sin + translatedY * cos + center.Y;
 
-        return new PointDouble(rotatedX, rotatedY);
+        return new(rotatedX, rotatedY);
     }
 
     public int[] ConvertToRegularPolygonInt(PointDouble[] regularPolygon)
