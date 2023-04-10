@@ -57,6 +57,7 @@ public class Program
         return regularPolygon;
     }
 
+    // Rotate clockwise if pixel coordinate is given because pixel coordinate system is top-bottom order.
     public PointDouble[] RotatePointContainer(PointDouble[] pointContainer, PointDouble center, double angleRadian)
     {
         var rotatedPointContainer = new PointDouble[pointContainer.Length];
