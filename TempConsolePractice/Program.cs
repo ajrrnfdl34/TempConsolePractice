@@ -1,43 +1,66 @@
 ﻿using System.Drawing;
+using static Program;
 
 public class Program
 {
     public static void Main(string[] args)
     {
-        var obj = new Program();
-        var pointContainer = obj.CreateRegularPolygon(new PointDouble(1, 1), 4, 5);
+        //var obj = new Program();
+        //var pointContainer = obj.createRegularPolygon(new PointDouble(1, 1), 4, 5);
 
-        foreach (var point in pointContainer)
-        {
-            Console.WriteLine($"{point.X}, {point.Y}");
-        }
+        //foreach (var point in pointContainer)
+        //{
+        //    Console.WriteLine($"{point.X}, {point.Y}");
+        //}
+
+        Console.WriteLine(8.0 % 3.0);
+        Console.WriteLine(-8.0 % 3.0);
+        Console.WriteLine(8.0 % -3.0);
+        Console.WriteLine(-8.0 % -3.0);
+        Console.WriteLine(5.0 % 16.0);
+        Console.WriteLine(-5.0 % 16.0);
+        Console.WriteLine(5.0 % -16.0);
+        Console.WriteLine(-5.0 % -16.0);
     }
 
     public struct PointDouble
     {
-        private double _x;
-        private double _y;
-
-        public double X
-        {
-            readonly get => _x;
-            set => _x = value;
-        }
-
-        public double Y
-        {
-            readonly get => _y;
-            set => _y = value;
-        }
+        public double X { get; set; }
+        public double Y { get; set; }
 
         public PointDouble(double x, double y)
         {
-            _x = x;
-            _y = y;
+            X = x;
+            Y = y;
         }
     }
 
-    public PointDouble[] CreateRegularPolygon(PointDouble center, double circumRadius, int totalSides)
+    public struct Figure
+    {
+        private PointDouble mCircumCenter;
+
+        public PointDouble CircumCenter
+        {
+            readonly get => mCircumCenter;
+            set => mCircumCenter = value;
+        }
+
+        public double CircumRadius { get; set; }
+
+        public int TotalSides { get; set; }
+
+        public double RotationRadian { get; set; }
+
+        public Figure(PointDouble circumCenter, double circumRadius, int totalSides, double rotationRadian)
+        {
+            mCircumCenter = new(circumCenter.X, circumCenter.Y);
+            CircumRadius = circumRadius;
+            TotalSides = totalSides;
+            RotationRadian = rotationRadian;
+        }
+    }
+
+    public PointDouble[] createRegularPolygon(PointDouble center, double circumRadius, int totalSides)
     {
         // CircumCircle, InCircle, CircumCenter, InCenter, CircumRadius, InRadius.
         var regularPolygon = new PointDouble[totalSides];
@@ -58,20 +81,20 @@ public class Program
     }
 
     // Rotate clockwise if pixel coordinate is given because pixel coordinate system is top-bottom order.
-    public PointDouble[] RotatePointContainer(PointDouble[] pointContainer, PointDouble center, double radian)
+    public PointDouble[] rotatePointContainer(PointDouble[] pointContainer, PointDouble center, double radian)
     {
         var rotatedPointContainer = new PointDouble[pointContainer.Length];
 
         for (var i = 0; i < pointContainer.Length; ++i)
         {
-            var rotatedPoint = RotatePoint(pointContainer[i], center, radian);
+            var rotatedPoint = rotatePoint(pointContainer[i], center, radian);
             rotatedPointContainer[i] = rotatedPoint;
         }
 
         return rotatedPointContainer;
     }
 
-    public PointDouble RotatePoint(PointDouble point, PointDouble center, double radian)
+    public PointDouble rotatePoint(PointDouble point, PointDouble center, double radian)
     {
         var translatedX = point.X - center.X;
         var translatedY = point.Y - center.Y;
@@ -84,7 +107,7 @@ public class Program
         return new(rotatedX, rotatedY);
     }
 
-    public int[] ConvertToRegularPolygonInt(PointDouble[] regularPolygon)
+    public int[] convertToRegularPolygonInt(PointDouble[] regularPolygon)
     {
         var regularPolygonInt = new int[2 * regularPolygon.Length];
 
@@ -99,4 +122,22 @@ public class Program
 
         return regularPolygonInt;
     }
+
+    private int realQuotient(double dividend, double divisor)
+    {
+        var quotient = 0;
+
+        if (divisor != 0)
+        {
+            if (divisor > 0)
+                quotient = (int)Math.Floor(dividend / divisor);
+            else
+                quotient = (int)Math.Ceiling(dividend / divisor);
+        }
+
+        return quotient;
+    }
+
+    private double realRemainder(double dividend, double divisor)
+        => dividend - realQuotient(dividend, divisor) * divisor;
 }
