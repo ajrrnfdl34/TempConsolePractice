@@ -13,51 +13,55 @@ public class Program
         //    Console.WriteLine($"{point.X}, {point.Y}");
         //}
 
-        Console.WriteLine(8.0 % 3.0);
-        Console.WriteLine(-8.0 % 3.0);
-        Console.WriteLine(8.0 % -3.0);
-        Console.WriteLine(-8.0 % -3.0);
-        Console.WriteLine(5.0 % 16.0);
-        Console.WriteLine(-5.0 % 16.0);
-        Console.WriteLine(5.0 % -16.0);
-        Console.WriteLine(-5.0 % -16.0);
-    }
-
-    public struct PointDouble
-    {
-        public double X { get; set; }
-        public double Y { get; set; }
-
-        public PointDouble(double x, double y)
-        {
-            X = x;
-            Y = y;
-        }
+        //Console.WriteLine(8.0 % 3.0);
+        //Console.WriteLine(-8.0 % 3.0);
+        //Console.WriteLine(8.0 % -3.0);
+        //Console.WriteLine(-8.0 % -3.0);
+        //Console.WriteLine(5.0 % 16.0);
+        //Console.WriteLine(-5.0 % 16.0);
+        //Console.WriteLine(5.0 % -16.0);
+        //Console.WriteLine(-5.0 % -16.0);
     }
 
     public struct Figure
     {
-        private PointDouble mCircumCenter;
-
-        public PointDouble CircumCenter
-        {
-            readonly get => mCircumCenter;
-            set => mCircumCenter = value;
-        }
-
-        public double CircumRadius { get; set; }
-
-        public int TotalSides { get; set; }
-
-        public double RotationRadian { get; set; }
+        public PointDouble circumCenter;
+        public double circumRadius;
+        public int totalSides;
+        public double rotationRadian;
 
         public Figure(PointDouble circumCenter, double circumRadius, int totalSides, double rotationRadian)
         {
-            mCircumCenter = new(circumCenter.X, circumCenter.Y);
-            CircumRadius = circumRadius;
-            TotalSides = totalSides;
-            RotationRadian = rotationRadian;
+            this.circumCenter = circumCenter;
+            this.circumRadius = circumRadius;
+            this.totalSides = totalSides;
+            this.rotationRadian = rotationRadian;
         }
+    }
+
+    public struct PointDouble
+    {
+        public double x;
+        public double y;
+
+        public PointDouble(double x, double y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    public int[] CreateRegularPolygonInt(Figure figure)
+    {
+        var regularPolygon = createRegularPolygon(figure.circumCenter, figure.circumRadius, figure.totalSides);
+        PointDouble[] rotatedPolygon = regularPolygon;
+
+        const double TOLERANCE = 1e-10;
+        var isRotationRadianApproximateZero = Math.Abs(figure.rotationRadian % (2 * Math.PI)) < TOLERANCE;
+        if (isRotationRadianApproximateZero == false)
+            rotatedPolygon = rotatePointContainer(regularPolygon, figure.circumCenter, figure.rotationRadian);
+
+        return convertToRegularPolygonInt(rotatedPolygon);
     }
 
     public PointDouble[] createRegularPolygon(PointDouble center, double circumRadius, int totalSides)
@@ -72,8 +76,8 @@ public class Program
             // Reflecteing the coordinate over y = x will cuase problem with WriteableBitmap because the order of points is changed.
             // In shorts. don't use (sinθ, cosθ) instead of (cosθ, sinθ).
             // Translate by center(x,y).
-            var x = circumRadius * Math.Sin(i * centralRadian) + center.X;
-            var y = circumRadius * Math.Cos(i * centralRadian) + center.Y;
+            var x = circumRadius * Math.Sin(i * centralRadian) + center.x;
+            var y = circumRadius * Math.Cos(i * centralRadian) + center.y;
             regularPolygon[i] = new PointDouble(x, y);
         }
 
@@ -96,13 +100,13 @@ public class Program
 
     public PointDouble rotatePoint(PointDouble point, PointDouble center, double radian)
     {
-        var translatedX = point.X - center.X;
-        var translatedY = point.Y - center.Y;
+        var translatedX = point.x - center.x;
+        var translatedY = point.y - center.y;
         var cos = Math.Cos(radian);
         var sin = Math.Sin(radian);
 
-        var rotatedX = translatedX * cos - translatedY * sin + center.X;
-        var rotatedY = translatedX * sin + translatedY * cos + center.Y;
+        var rotatedX = translatedX * cos - translatedY * sin + center.x;
+        var rotatedY = translatedX * sin + translatedY * cos + center.y;
 
         return new(rotatedX, rotatedY);
     }
@@ -111,11 +115,10 @@ public class Program
     {
         var regularPolygonInt = new int[2 * regularPolygon.Length];
 
-        // [WIP]
         for (var i = 0; i < regularPolygon.Length; ++i)
         {
-            var x = (int)Math.Round(regularPolygon[i].X);
-            var y = (int)Math.Round(regularPolygon[i].Y);
+            var x = (int)Math.Round(regularPolygon[i].x);
+            var y = (int)Math.Round(regularPolygon[i].y);
             regularPolygonInt[2 * i] = x;
             regularPolygonInt[2 * i + 1] = y;
         }
