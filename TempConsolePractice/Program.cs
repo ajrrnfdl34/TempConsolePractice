@@ -30,7 +30,7 @@ public class Program
         public int totalSides;
         public double rotationRadian;
 
-        public Figure(PointDouble circumCenter, double circumRadius, int totalSides, double rotationRadian)
+        public Figure(PointDouble circumCenter, double circumRadius, int totalSides = 0, double rotationRadian = 0)
         {
             this.circumCenter = circumCenter;
             this.circumRadius = circumRadius;
