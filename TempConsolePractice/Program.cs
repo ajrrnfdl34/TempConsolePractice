@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Specialized;
+using System.Drawing;
 using static Program;
 
 public class Program
@@ -21,6 +22,21 @@ public class Program
         //Console.WriteLine(-5.0 % 16.0);
         //Console.WriteLine(5.0 % -16.0);
         //Console.WriteLine(-5.0 % -16.0);
+
+        //uint a = -14;
+
+        Person p = null;
+    }
+
+    public class Person
+    { }
+
+    public struct Foo
+    {
+        public int value;
+
+        public Foo(int value)
+        { }
     }
 
     public struct Figure
@@ -50,6 +66,27 @@ public class Program
             this.y = y;
         }
     }
+
+    //public void DrawFigure(WriteableBitmap bitmap, Figure figure, System.Windows.Media.Color color)
+    //{
+    //    const double TOLERANCE = 1e-10;
+    //    if (bitmap != null && figure.circumRadius > TOLERANCE)
+    //    {
+    //        if (figure.totalSides == 0)
+    //        {
+    //            var topLeftX = (int)(figure.circumCenter.x - figure.circumRadius);
+    //            var topLeftY = (int)(figure.circumCenter.y - figure.circumRadius);
+    //            var bottomRightX = (int)(figure.circumCenter.x + figure.circumRadius);
+    //            var bottomRightY = (int)(figure.circumCenter.y + figure.circumRadius);
+    //            bitmap.FillEllipse(topLeftX, topLeftY, bottomRightX, bottomRightY, color);
+    //        }
+    //        else
+    //        {
+    //            var regularPolygonInt = CreateRegularPolygonInt(figure);
+    //            bitmap.FillPolygon(regularPolygonInt, color);
+    //        }
+    //    }
+    //}
 
     public int[] CreateRegularPolygonInt(Figure figure)
     {
