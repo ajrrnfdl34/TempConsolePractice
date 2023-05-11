@@ -4,8 +4,33 @@ using static Program;
 
 public class Program
 {
+    public static async void tempAsync()
+    {
+        Console.WriteLine("start");
+
+        var t = Task.Run(() =>
+        {
+            for (var i = 0; i < 10; ++i)
+            {
+                Thread.Sleep(1000);
+                Console.WriteLine($"async {i}");
+            }
+        });
+
+        for (var i = 0; i < 10; ++i)
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine($"synchronous {i}");
+        }
+
+        await t;
+
+        Console.WriteLine("end");
+    }
+
     public static void Main(string[] args)
     {
+        tempAsync();
         //var obj = new Program();
         //var pointContainer = obj.createRegularPolygon(new PointDouble(1, 1), 4, 5);
 
@@ -25,7 +50,42 @@ public class Program
 
         //uint a = -14;
 
-        Person p = null;
+        Animal cat = new Cat();
+        Animal dog = new Dog();
+
+        cat.MakeSound();
+        dog.MakeSound();
+
+        var foo = F.b;
+
+        Console.WriteLine(foo.ToString());
+    }
+
+    public enum F
+    {
+        a, b, c
+    }
+
+    public class Animal
+    {
+        public virtual void MakeSound()
+        { Console.WriteLine("hmm"); }
+    }
+
+    public class Cat : Animal
+    {
+        public override void MakeSound()
+        {
+            Console.WriteLine("Meow");
+        }
+    }
+
+    public class Dog : Animal
+    {
+        public override void MakeSound()
+        {
+            Console.WriteLine("Woof");
+        }
     }
 
     public class Person
