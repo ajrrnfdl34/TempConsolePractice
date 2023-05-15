@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Drawing;
+using System.Reflection;
 using static Program;
 
 public class Program
@@ -28,9 +29,74 @@ public class Program
         Console.WriteLine("end");
     }
 
+    public static class StaticFoo
+    {
+        public static string value = "aaa";
+        public static string value2 = "bbb";
+
+        public static string Value { get; set; } = "bbb";
+    }
+
+    public static void inner()
+    {
+        for (int i = 0; i < 5; ++i)
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine($"inner {i}");
+        }
+    }
+
+    public static async Task asyncCaller()
+    {
+        for (var i = 0; i < 5; ++i)
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine($"before asyncCaller {i}");
+        }
+
+        await Task.Run(inner);
+
+        for (var i = 0; i < 5; ++i)
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine($"middle asyncCaller {i}");
+        }
+
+        Console.WriteLine($"end asyncCaller");
+    }
+
+    public static async Task nestedAsyncCallerAsync()
+    {
+        for (var i = 0; i < 5; ++i)
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine($"before nestedAsyncCaller {i}");
+        }
+
+        await asyncCaller();
+
+        for (var i = 0; i < 5; ++i)
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine($"middle nestedAsyncCaller {i}");
+        }
+
+        Console.WriteLine("nestedAsyncCaller end");
+    }
+
     public static void Main(string[] args)
     {
-        tempAsync();
+        var task = nestedAsyncCallerAsync();
+
+        for (var i = 0; i < 5; ++i)
+        {
+            Thread.Sleep(1000);
+            Console.WriteLine($"main {i}");
+        }
+
+        task.Wait();
+
+        //tempAsync();
         //var obj = new Program();
         //var pointContainer = obj.createRegularPolygon(new PointDouble(1, 1), 4, 5);
 
@@ -50,15 +116,15 @@ public class Program
 
         //uint a = -14;
 
-        Animal cat = new Cat();
-        Animal dog = new Dog();
+        //Animal cat = new Cat();
+        //Animal dog = new Dog();
 
-        cat.MakeSound();
-        dog.MakeSound();
+        //cat.MakeSound();
+        //dog.MakeSound();
 
-        var foo = F.b;
+        //var foo = F.b;
 
-        Console.WriteLine(foo.ToString());
+        //Console.WriteLine(foo.ToString());
     }
 
     public enum F
