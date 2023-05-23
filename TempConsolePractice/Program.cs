@@ -84,17 +84,52 @@ public class Program
         Console.WriteLine("nestedAsyncCaller end");
     }
 
-    public static void Main(string[] args)
+    public static void testException()
     {
-        var task = nestedAsyncCallerAsync();
-
-        for (var i = 0; i < 5; ++i)
+        try
         {
-            Thread.Sleep(1000);
-            Console.WriteLine($"main {i}");
+            var a = new int[3];
+
+            var b = a[-1];
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
         }
 
-        task.Wait();
+        Console.WriteLine("boo");
+    }
+
+    public static void Main(string[] args)
+    {
+        testException();
+
+        //string filePath = @"C:\MyDir\MySubDir\myfile.ext";
+        //string directoryName;
+        //int i = 0;
+
+        //while (filePath != null)
+        //{
+        //    directoryName = Path.GetDirectoryName(filePath);
+        //    Console.WriteLine("GetDirectoryName('{0}') returns '{1}'",
+        //        filePath, directoryName);
+        //    filePath = directoryName;
+        //    if (i == 1)
+        //    {
+        //        filePath = directoryName + @"\";  // this will preserve the previous path
+        //    }
+        //    i++;
+        //}
+
+        //var task = nestedAsyncCallerAsync();
+
+        //for (var i = 0; i < 5; ++i)
+        //{
+        //    Thread.Sleep(1000);
+        //    Console.WriteLine($"main {i}");
+        //}
+
+        //task.Wait();
 
         //tempAsync();
         //var obj = new Program();
