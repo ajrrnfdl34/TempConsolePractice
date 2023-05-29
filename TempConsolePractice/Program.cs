@@ -100,9 +100,75 @@ public class Program
         Console.WriteLine("boo");
     }
 
+    public class Animal
+    {
+        public void bark()
+        {
+            Console.WriteLine("fff");
+        }
+    }
+
+    public class Dog : Animal
+    {
+        public void bark()
+        {
+            Console.WriteLine("aww");
+        }
+
+        public void eat()
+        {
+            Console.WriteLine("mmmmmm");
+        }
+    }
+
+    public static int calc()
+    {
+        var i = 0;
+
+        Thread.Sleep(500);
+        for (; i < 10_000; ++i)
+        { }
+
+        return i;
+    }
+
+    public static async Task<int[]> testStaticAsyncFunc()
+    {
+        var taskContainer = new List<Task<int>>();
+        taskContainer.Add(Task.Run(calc));
+        taskContainer.Add(Task.Run(calc));
+
+        var returnTask = await Task.WhenAll(taskContainer);
+
+        foreach (var task in taskContainer)
+        {
+            Console.WriteLine(task.Result);
+        }
+
+        return returnTask;
+    }
+
     public static void Main(string[] args)
     {
-        testException();
+        var task = testStaticAsyncFunc();
+
+        for (var i = 0; i < 10; ++i)
+        {
+            Console.WriteLine(i);
+            Thread.Sleep(100);
+        }
+
+        task.Wait();
+
+        //var a = DateTime.Now;
+
+        //Console.Write(a.ToString("yyyyMMddHHmmss"));
+
+        //Animal animal = new Dog();
+
+        //animal.bark();
+
+        //testException();
 
         //string filePath = @"C:\MyDir\MySubDir\myfile.ext";
         //string directoryName;
@@ -165,28 +231,6 @@ public class Program
     public enum F
     {
         a, b, c
-    }
-
-    public class Animal
-    {
-        public virtual void MakeSound()
-        { Console.WriteLine("hmm"); }
-    }
-
-    public class Cat : Animal
-    {
-        public override void MakeSound()
-        {
-            Console.WriteLine("Meow");
-        }
-    }
-
-    public class Dog : Animal
-    {
-        public override void MakeSound()
-        {
-            Console.WriteLine("Woof");
-        }
     }
 
     public class Person
