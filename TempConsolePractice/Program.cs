@@ -150,6 +150,9 @@ public class Program
 
     public static void Main(string[] args)
     {
+        var a = 12.12345678f;
+        Console.WriteLine(a);
+
         var task = testStaticAsyncFunc();
 
         for (var i = 0; i < 10; ++i)
