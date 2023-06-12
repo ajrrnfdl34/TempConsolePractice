@@ -1,6 +1,7 @@
 ﻿using System.Collections.Specialized;
 using System.Drawing;
 using System.Reflection;
+using System.Xml.Serialization;
 using static Program;
 
 public class Program
@@ -148,20 +149,118 @@ public class Program
         return returnTask;
     }
 
-    public static void Main(string[] args)
+    public class Person
     {
-        var a = 12.12345678f;
-        Console.WriteLine(a);
+        public string name;
+        public int age;
 
-        var task = testStaticAsyncFunc();
-
-        for (var i = 0; i < 10; ++i)
+        public Person(string name, int age)
         {
-            Console.WriteLine(i);
-            Thread.Sleep(100);
+            this.name = name;
+            this.age = age;
         }
 
-        task.Wait();
+        public Person()
+        { }
+
+        public override string ToString()
+        {
+            return $"name: {name} age: {age}";
+        }
+    }
+
+    public class Employee : Person
+    {
+        public int salary;
+
+        public Employee(string name, int age, int salary) : base(name, age)
+        {
+            this.salary = salary;
+        }
+
+        public Employee()
+        { }
+
+        public string show()
+        {
+            return base.ToString() + $" salary: {salary}";
+        }
+    }
+
+    public class Phone
+    {
+        public int number;
+
+        public Phone(int number)
+        {
+            this.number = number;
+        }
+
+        public Phone()
+        { }
+
+        public override string ToString()
+        {
+            return $"number: {number}";
+        }
+    }
+
+    [XmlInclude(typeof(Person)), XmlInclude(typeof(Employee)), XmlInclude(typeof(Phone))]
+    public class Box
+    {
+        public List<object> container;
+    }
+
+    public static void Main(string[] args)
+    {
+        var container = new List<object>();
+        container.Add(new Person("a", 12));
+        container.Add(new Phone(3));
+        container.Add(new Employee("san", 144, 11));
+        container.Add(new Person("b", 13));
+        container.Add(new Phone(14));
+        container.Add(new Employee("lee", 111, 41));
+
+        var box = new Box();
+        box.container = container;
+
+        var serializer = new XmlSerializer(typeof(Box));
+
+        var path = @"C:\Users\wj.lee\Desktop\test2.xml";
+        using (var writer = new StreamWriter(path))
+        {
+            serializer.Serialize(writer, box);
+        }
+
+        Box deserializedBox;
+
+        using (var reader = new StreamReader(path))
+        {
+            deserializedBox = serializer.Deserialize(reader) as Box ?? new Box();
+        }
+
+        foreach (var item in deserializedBox.container)
+        {
+            if (item is Employee)
+                Console.WriteLine(((Employee)item).show());
+            else if (item is Person)
+                Console.WriteLine(item as Person);
+            else if (item is Phone)
+                Console.WriteLine(item as Phone);
+        }
+
+        //var a = 12.12345678f;
+        //Console.WriteLine(a);
+
+        //var task = testStaticAsyncFunc();
+
+        //for (var i = 0; i < 10; ++i)
+        //{
+        //    Console.WriteLine(i);
+        //    Thread.Sleep(100);
+        //}
+
+        //task.Wait();
 
         //var a = DateTime.Now;
 
@@ -235,9 +334,6 @@ public class Program
     {
         a, b, c
     }
-
-    public class Person
-    { }
 
     public struct Foo
     {
