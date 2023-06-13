@@ -211,43 +211,82 @@ public class Program
         public List<object> container;
     }
 
+    private int FindNoMatch(List<string> actualContainer, ref List<string> targetContainer, List<string> noMatchActualContainer, List<string> noMatchTargetContainer)
+    {
+        actualContainer.Sort();
+        targetContainer.Sort();
+        targetContainer = targetContainer.Distinct().ToList();
+
+        var prevOverlapIndex = -1;
+        var lastOverlapIndex = -1;
+        var totalOverlap = 0;
+        for (var i = 0; i < actualContainer.Count; ++i)
+        {
+            var isOverlap = false;
+
+            for (var j = lastOverlapIndex + 1; j < targetContainer.Count; ++j)
+            {
+                // If matched once, no need to search previous index because both are sorted in same order(asceding, descending).
+                if (actualContainer[i] == targetContainer[j])
+                {
+                    isOverlap = true;
+                    prevOverlapIndex = lastOverlapIndex;
+                    lastOverlapIndex = j;
+                    ++totalOverlap;
+                    break;
+                }
+            }
+
+            if (isOverlap == false)
+                noMatchActualContainer.Add(actualContainer[i]);
+            else
+            {
+                noMatchTargetContainer.AddRange(targetContainer.GetRange(prevOverlapIndex + 1, lastOverlapIndex - prevOverlapIndex - 1));
+            }
+        }
+
+        return totalOverlap;
+    }
+
     public static void Main(string[] args)
     {
-        var container = new List<object>();
-        container.Add(new Person("a", 12));
-        container.Add(new Phone(3));
-        container.Add(new Employee("san", 144, 11));
-        container.Add(new Person("b", 13));
-        container.Add(new Phone(14));
-        container.Add(new Employee("lee", 111, 41));
+        Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
 
-        var box = new Box();
-        box.container = container;
+        //var container = new List<object>();
+        //container.Add(new Person("a", 12));
+        //container.Add(new Phone(3));
+        //container.Add(new Employee("san", 144, 11));
+        //container.Add(new Person("b", 13));
+        //container.Add(new Phone(14));
+        //container.Add(new Employee("lee", 111, 41));
 
-        var serializer = new XmlSerializer(typeof(Box));
+        //var box = new Box();
+        //box.container = container;
 
-        var path = @"C:\Users\wj.lee\Desktop\test2.xml";
-        using (var writer = new StreamWriter(path))
-        {
-            serializer.Serialize(writer, box);
-        }
+        //var serializer = new XmlSerializer(typeof(Box));
 
-        Box deserializedBox;
+        //var path = @"C:\Users\wj.lee\Desktop\test2.xml";
+        //using (var writer = new StreamWriter(path))
+        //{
+        //    serializer.Serialize(writer, box);
+        //}
 
-        using (var reader = new StreamReader(path))
-        {
-            deserializedBox = serializer.Deserialize(reader) as Box ?? new Box();
-        }
+        //Box deserializedBox;
 
-        foreach (var item in deserializedBox.container)
-        {
-            if (item is Employee)
-                Console.WriteLine(((Employee)item).show());
-            else if (item is Person)
-                Console.WriteLine(item as Person);
-            else if (item is Phone)
-                Console.WriteLine(item as Phone);
-        }
+        //using (var reader = new StreamReader(path))
+        //{
+        //    deserializedBox = serializer.Deserialize(reader) as Box ?? new Box();
+        //}
+
+        //foreach (var item in deserializedBox.container)
+        //{
+        //    if (item is Employee)
+        //        Console.WriteLine(((Employee)item).show());
+        //    else if (item is Person)
+        //        Console.WriteLine(item as Person);
+        //    else if (item is Phone)
+        //        Console.WriteLine(item as Phone);
+        //}
 
         //var a = 12.12345678f;
         //Console.WriteLine(a);
