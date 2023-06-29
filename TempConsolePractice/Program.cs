@@ -211,11 +211,11 @@ public class Program
         public List<object> container;
     }
 
-    private int FindNoMatch(List<string> actualContainer, ref List<string> targetContainer, List<string> noMatchActualContainer, List<string> noMatchTargetContainer)
+    private int FindNoMatch(List<string> actualContainer, ref List<string> expectedContainer, List<string> noMatchActualContainer, List<string> noMatchExpectedContainer)
     {
         actualContainer.Sort();
-        targetContainer.Sort();
-        targetContainer = targetContainer.Distinct().ToList();
+        expectedContainer.Sort();
+        expectedContainer = expectedContainer.Distinct().ToList();
 
         var prevOverlapIndex = -1;
         var lastOverlapIndex = -1;
@@ -224,10 +224,10 @@ public class Program
         {
             var isOverlap = false;
 
-            for (var j = lastOverlapIndex + 1; j < targetContainer.Count; ++j)
+            for (var j = lastOverlapIndex + 1; j < expectedContainer.Count; ++j)
             {
                 // If matched once, no need to search previous index because both are sorted in same order(asceding, descending).
-                if (actualContainer[i] == targetContainer[j])
+                if (actualContainer[i] == expectedContainer[j])
                 {
                     isOverlap = true;
                     prevOverlapIndex = lastOverlapIndex;
@@ -241,7 +241,7 @@ public class Program
                 noMatchActualContainer.Add(actualContainer[i]);
             else
             {
-                noMatchTargetContainer.AddRange(targetContainer.GetRange(prevOverlapIndex + 1, lastOverlapIndex - prevOverlapIndex - 1));
+                noMatchExpectedContainer.AddRange(expectedContainer.GetRange(prevOverlapIndex + 1, lastOverlapIndex - prevOverlapIndex - 1));
             }
         }
 
@@ -250,7 +250,21 @@ public class Program
 
     public static void Main(string[] args)
     {
-        Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
+        var c = new List<string>();
+        c.Add("123");
+        c.Add("234");
+
+        var c2 = new List<string>();
+        foreach (var item in c)
+        {
+            c2.Add(item);
+        }
+
+        c.Remove("123");
+        c[0] = "555";
+
+        foreach (var item in c) { Console.WriteLine(item); }
+        foreach (var item in c2) { Console.WriteLine(item); }
 
         //var container = new List<object>();
         //container.Add(new Person("a", 12));
