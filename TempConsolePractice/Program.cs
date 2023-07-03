@@ -1,4 +1,6 @@
 ﻿using System.Collections.Specialized;
+using System.Data.Common;
+using System.Data;
 using System.Drawing;
 using System.Reflection;
 using System.Xml.Serialization;
@@ -6,6 +8,231 @@ using static Program;
 
 public class Program
 {
+    //public static async Task<List<T>> SelectAllAsync<T>(CancellationToken cancellationToken, int scanIndex) where T : class, new()
+    //{
+    //    var query = DTQuery.GetSelectAllQuery<T>(scanIndex);
+    //    if (query == null)
+    //        return null;
+
+    //    return await SelectDbTableAsync<T>(query, cancellationToken);
+    //}
+
+    //public static async Task<List<T>> SelectAllAsync<T>(CancellationToken cancellationToken) where T : class, new()
+    //{
+    //    var query = DTQuery.GetSelectAllQuery<T>();
+    //    if (query == null)
+    //        return null;
+
+    //    return await SelectDbTableAsync<T>(query, cancellationToken);
+    //}
+
+    //public static async Task<Dictionary<T, T2>> SelectAllAsync<T, T2>(CancellationToken cancellationToken, string keyPropertyName, int scanIndex) where T2 : class, new()
+    //{
+    //    var query = DTQuery.GetSelectAllQuery<T2>(scanIndex);
+    //    if (query == null)
+    //        return null;
+
+    //    return await SelectDbTableAsync<T, T2>(query, keyPropertyName, cancellationToken);
+    //}
+
+    //private static async Task<List<T>> SelectDbTableAsync<T>(string query, CancellationToken cancellationToken) where T : class, new()
+    //{
+    //    var queryResult = new List<T>();
+
+    //    try
+    //    {
+    //        using (DbDataReader dbReader = await ODPDotNetService.Instance.ExecuteReaderAsync(query, CommandType.Text, null, cancellationToken))
+    //        {
+    //            OracleDataReader reader = dbReader as OracleDataReader;
+    //            reader.FetchSize = reader.RowSize * 1000;
+
+    //            while (reader.Read())
+    //            {
+    //                cancellationToken.ThrowIfCancellationRequested();
+
+    //                var dbRow = SelectDbRow<T>(reader);
+    //                if (dbRow == null)
+    //                    continue;
+
+    //                queryResult.Add(dbRow);
+    //            }
+
+    //            reader.Close();
+    //        }
+
+    //        return queryResult;
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        return HandleExceptionSelectDbTableAsync(e, queryResult);
+    //    }
+    //}
+
+    //private static async Task<Dictionary<T, T2>> SelectDbTableAsync<T, T2>(string query, string keyPropertyName, CancellationToken cancellationToken) where T2 : class, new()
+    //{
+    //    var queryResult = new Dictionary<T, T2>();
+    //    var type = typeof(T2);
+    //    var keyPropertyInfo = type?.GetProperty(keyPropertyName);
+    //    if (keyPropertyInfo == null)
+    //        return queryResult;
+
+    //    try
+    //    {
+    //        using (DbDataReader dbReader = await ODPDotNetService.Instance.ExecuteReaderAsync(query, CommandType.Text, null, cancellationToken))
+    //        {
+    //            OracleDataReader reader = dbReader as OracleDataReader;
+    //            reader.FetchSize = reader.RowSize * 1000;
+
+    //            while (reader.Read())
+    //            {
+    //                cancellationToken.ThrowIfCancellationRequested();
+
+    //                var dbRow = SelectDbRow<T2>(reader);
+    //                if (dbRow == null)
+    //                    continue;
+
+    //                var key = (T)keyPropertyInfo.GetValue(dbRow);
+    //                if (key == null)
+    //                    continue;
+
+    //                queryResult.Add(key, dbRow);
+    //            }
+
+    //            reader.Close();
+    //        }
+
+    //        return queryResult;
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        return HandleExceptionSelectDbTableAsync(e, queryResult);
+    //    }
+    //}
+
+    //private static T SelectDbRow<T>(OracleDataReader reader) where T : class, new()
+    //{
+    //    var dbRow = new T();
+    //    var type = typeof(T);
+    //    var propertyInfoContainer = type?.GetProperties();
+    //    if (dbRow == null || propertyInfoContainer == null)
+    //        return null;
+
+    //    var dbRowItemOrdianl = 0;
+    //    foreach (var propertyInfo in propertyInfoContainer)
+    //    {
+    //        SelectDbRowItem(dbRow, propertyInfo, reader, dbRowItemOrdianl++);
+    //    }
+
+    //    return dbRow;
+    //}
+
+    //private static void SelectDbRowItem<T>(T dbRow, PropertyInfo propertyInfo, OracleDataReader reader, int dbRowItemOrdianl) where T : class
+    //{
+    //    var propertyType = propertyInfo?.PropertyType;
+    //    if (propertyType == null)
+    //        return;
+
+    //    if (propertyType == typeof(string))
+    //    {
+    //        propertyInfo.SetValue(dbRow, ODPDotNetUtil.GetRows(reader, dbRowItemOrdianl));
+    //    }
+    //    else if (propertyType == typeof(double))
+    //    {
+    //        propertyInfo.SetValue(dbRow, ODPDotNetUtil.GetDouble(reader, dbRowItemOrdianl));
+    //    }
+    //    else if (propertyType == typeof(float))
+    //    {
+    //        propertyInfo.SetValue(dbRow, ODPDotNetUtil.GetFloat(reader, dbRowItemOrdianl));
+    //    }
+    //    else if (propertyType == typeof(int))
+    //    {
+    //        propertyInfo.SetValue(dbRow, ODPDotNetUtil.GetInt(reader, dbRowItemOrdianl));
+    //    }
+    //}
+
+    //public static string GetSelectAllQuery<T>(int scanIndex) where T : class
+    //{
+    //    var query = GetSelectAllQuery<T>();
+    //    if (query == null)
+    //        return null;
+
+    //    var where = ODPDotNetUtil.AddNewLine($"    AND SCAN_IDX = {scanIndex}");
+
+    //    return query + where;
+    //}
+
+    //public static string GetSelectAllQuery<T>() where T : class
+    //{
+    //    var tableName = GetTableName<T>();
+    //    if (tableName == null)
+    //        return null;
+
+    //    var type = typeof(T);
+    //    var propertyInfoContainer = type?.GetProperties()?.ToList();
+    //    var propertyNameContainer = propertyInfoContainer?.ConvertAll(i => (i.Name));
+
+    //    var isNullOrEmpty = (propertyNameContainer?.Count() ?? 0) <= 0;
+    //    if (isNullOrEmpty)
+    //        return null;
+
+    //    var distinct = " ";
+    //    if (type == typeof(InspectionSliceInfo) || type == typeof(LinkInspectionSliceInfo))
+    //        distinct = " distinct ";
+
+    //    var select = ODPDotNetUtil.AddNewLine($" SELECT{distinct}{propertyNameContainer.First()}");
+
+    //    for (var i = 1; i < propertyNameContainer.Count(); ++i)
+    //        select += $", {propertyNameContainer[i]}";
+
+    //    select += ODPDotNetUtil.AddNewLine("");
+
+    //    var from = ODPDotNetUtil.AddNewLine($" FROM {tableName.ToString()}");
+
+    //    var where = ODPDotNetUtil.AddNewLine(" WHERE 1=1");
+
+    //    var query = select + from + where;
+    //    return query;
+    //}
+
+    //private static string GetTableName<T>() where T : class
+    //{
+    //    var type = typeof(T);
+
+    //    if (type == typeof(InspectionMask))
+    //        return TableName.INSPECTION.ToString();
+    //    else if (type == typeof(InspectionSetup))
+    //        return TableName.INSP_SETUP.ToString();
+    //    else if (type == typeof(InspectionSliceInfo))
+    //        return TableName.INSP_SLICE_INFO.ToString();
+    //    else if (type == typeof(LinkInspectionSliceInfo))
+    //        return TableName.LNK_INSP_SLICE_INFO.ToString();
+    //    else if (type == typeof(InspectionArea))
+    //        return TableName.INSP_AREA.ToString();
+    //    else if (type == typeof(InspectionSdf))
+    //        return TableName.INSP_SDF.ToString();
+    //    else if (type == typeof(SummarySize))
+    //        return TableName.SMY_SIZE.ToString();
+    //    else if (type == typeof(PdmResult))
+    //        return TableName.PDM_RESULT.ToString();
+    //    else if (type == typeof(StdDefectCode))
+    //        return TableName.STD_DEFECT_CODE.ToString();
+
+    //    return null;
+    //}
+
+    //private enum TableName
+    //{
+    //    INSPECTION,
+    //    INSP_SETUP,
+    //    INSP_SLICE_INFO,
+    //    LNK_INSP_SLICE_INFO,
+    //    INSP_AREA,
+    //    INSP_SDF,
+    //    SMY_SIZE,
+    //    PDM_RESULT,
+    //    STD_DEFECT_CODE
+    //}
+
     public static async void tempAsync()
     {
         Console.WriteLine("start");
