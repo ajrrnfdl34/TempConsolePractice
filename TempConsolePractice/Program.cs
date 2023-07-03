@@ -248,23 +248,52 @@ public class Program
         return totalOverlap;
     }
 
+    public class Sentence
+    {
+        public string word;
+        public int dimension;
+        public List<Sentence>? sentenceContainer;
+
+        public Sentence(string word, int dimension, List<Sentence>? sentenceContainer)
+        {
+            this.word = word;
+            this.dimension = dimension;
+            this.sentenceContainer = sentenceContainer;
+        }
+    }
+
     public static void Main(string[] args)
     {
-        var c = new List<string>();
-        c.Add("123");
-        c.Add("234");
+        var index = 0;
+        var parsedFile = new Sentence("FileA", 3, new List<Sentence>());
+        parsedFile.sentenceContainer.Add(new Sentence("Employee", 2, new List<Sentence>()));
+        parsedFile.sentenceContainer[index].sentenceContainer.Add(new Sentence("Name", 1, new List<Sentence>()));
+        var t = parsedFile.sentenceContainer[index].sentenceContainer.Where(i => i.word == "Name").FirstOrDefault();
+        t.sentenceContainer.Add(new Sentence("Lee", 0, null));
+        t.sentenceContainer.Add(new Sentence("Kim", 0, null));
+        parsedFile.sentenceContainer[index].sentenceContainer.Add(new Sentence("Salary", 1, new List<Sentence>()));
+        var t2 = parsedFile.sentenceContainer[index].sentenceContainer.Where(i => i.word == "Salary").FirstOrDefault();
+        t2.sentenceContainer.Add(new Sentence("14", 0, null));
+        t2.sentenceContainer.Add(new Sentence("20", 0, null));
+        parsedFile.sentenceContainer.Add(new Sentence("Anniversary", 1, new List<Sentence>()));
+        ++index;
+        parsedFile.sentenceContainer[index].sentenceContainer.Add(new Sentence("2099-12-12", 0, null));
 
-        var c2 = new List<string>();
-        foreach (var item in c)
-        {
-            c2.Add(item);
-        }
+        //var c = new List<string>();
+        //c.Add("123");
+        //c.Add("234");
 
-        c.Remove("123");
-        c[0] = "555";
+        //var c2 = new List<string>();
+        //foreach (var item in c)
+        //{
+        //    c2.Add(item);
+        //}
 
-        foreach (var item in c) { Console.WriteLine(item); }
-        foreach (var item in c2) { Console.WriteLine(item); }
+        //c.Remove("123");
+        //c[0] = "555";
+
+        //foreach (var item in c) { Console.WriteLine(item); }
+        //foreach (var item in c2) { Console.WriteLine(item); }
 
         //var container = new List<object>();
         //container.Add(new Person("a", 12));
