@@ -533,7 +533,7 @@ public class Program
     {
         // drawingTargetAreaTopLeft become the new (0,0) of bitmap.
         // So defect's relative coordinate withing bitmap is defect - drawingTargetAreaTopLeft
-        // and since drawingTargetArea, itself is shrinked by 1 / zoomScale
+        // and since drawingTargetArea, itself is shrinked by 1 / zoomScale,
         // any defect within drawingTargetArea needs to be stretched to zoomScale.
         // Top-Bottom, bitmap
         //var drawingTargetAreaHalfWidth = ImageViewOption.ViewWidth / zoomScale / 2.0;
