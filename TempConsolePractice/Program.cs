@@ -489,22 +489,78 @@ public class Program
         }
     }
 
+    //private T Temp<T>(object item) where T : class, new()
+    //{
+    //    var item = new T();
+    //    var type = typeof(T);
+    //    var propertyInfoContainer = type.GetProperties();
+    //    foreach (var i in propertyInfoContainer)
+    //    {
+    //        if (i.PropertyType.IsClass)
+    //        {
+    //            if (i.PropertyType.IsGenericType) { }
+    //            else
+    //            {
+    //                i.SetValue(item, Temp());
+    //            }
+    //        }
+    //        else
+    //            i.SetValue(item, 0);
+    //    }
+
+    //    return item;
+    //}
+
+    public class FooT
+    {
+        public int Data;
+    }
+
+    public class Temp
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+
+        public FooT Foo { get; set; }
+    }
+
+    public enum Te
+    {
+        None = 14,
+    }
+
     public static void Main(string[] args)
     {
-        var index = 0;
-        var parsedFile = new Sentence("FileA", 3, new List<Sentence>());
-        parsedFile.sentenceContainer.Add(new Sentence("Employee", 2, new List<Sentence>()));
-        parsedFile.sentenceContainer[index].sentenceContainer.Add(new Sentence("Name", 1, new List<Sentence>()));
-        var t = parsedFile.sentenceContainer[index].sentenceContainer.Where(i => i.word == "Name").FirstOrDefault();
-        t.sentenceContainer.Add(new Sentence("Lee", 0, null));
-        t.sentenceContainer.Add(new Sentence("Kim", 0, null));
-        parsedFile.sentenceContainer[index].sentenceContainer.Add(new Sentence("Salary", 1, new List<Sentence>()));
-        var t2 = parsedFile.sentenceContainer[index].sentenceContainer.Where(i => i.word == "Salary").FirstOrDefault();
-        t2.sentenceContainer.Add(new Sentence("14", 0, null));
-        t2.sentenceContainer.Add(new Sentence("20", 0, null));
-        parsedFile.sentenceContainer.Add(new Sentence("Anniversary", 1, new List<Sentence>()));
-        ++index;
-        parsedFile.sentenceContainer[index].sentenceContainer.Add(new Sentence("2099-12-12", 0, null));
+        // drawingTargetAreaTopLeft become the new (0,0) of bitmap.
+        // So defect's relative coordinate withing bitmap is defect - drawingTargetAreaTopLeft
+        // and since drawingTargetArea, itself is shrinked by 1 / zoomScale
+        // any defect within drawingTargetArea needs to be stretched to zoomScale.
+        // Top-Bottom, bitmap
+        //var drawingTargetAreaHalfWidth = ImageViewOption.ViewWidth / zoomScale / 2.0;
+        //var drawingTargetAreaHalfHeight = ImageViewOption.ViewHeight / zoomScale / 2.0;
+        //var drawingTargetAreaTopLeftX = ImageViewOption.CenterX - drawingTargetAreaHalfWidth;
+        //var drawingTargetAreaTopLeftY = ImageViewOption.CenterY - drawingTargetAreaHalfHeight;
+        //var drawingTargetAreaBottomRightX = ImageViewOption.CenterX + drawingTargetAreaHalfWidth;
+        //var drawingTargetAreaBottomRightY = ImageViewOption.CenterY + drawingTargetAreaHalfHeight;
+        //var circumCenterX = (defect.RealX - drawingTargetAreaTopLeftX) * zoomScale;
+
+        var a = $"{(int)Te.None}";
+        Console.WriteLine(a);
+        Console.WriteLine(Te.None);
+        //var index = 0;
+        //var parsedFile = new Sentence("FileA", 3, new List<Sentence>());
+        //parsedFile.sentenceContainer.Add(new Sentence("Employee", 2, new List<Sentence>()));
+        //parsedFile.sentenceContainer[index].sentenceContainer.Add(new Sentence("Name", 1, new List<Sentence>()));
+        //var t = parsedFile.sentenceContainer[index].sentenceContainer.Where(i => i.word == "Name").FirstOrDefault();
+        //t.sentenceContainer.Add(new Sentence("Lee", 0, null));
+        //t.sentenceContainer.Add(new Sentence("Kim", 0, null));
+        //parsedFile.sentenceContainer[index].sentenceContainer.Add(new Sentence("Salary", 1, new List<Sentence>()));
+        //var t2 = parsedFile.sentenceContainer[index].sentenceContainer.Where(i => i.word == "Salary").FirstOrDefault();
+        //t2.sentenceContainer.Add(new Sentence("14", 0, null));
+        //t2.sentenceContainer.Add(new Sentence("20", 0, null));
+        //parsedFile.sentenceContainer.Add(new Sentence("Anniversary", 1, new List<Sentence>()));
+        //++index;
+        //parsedFile.sentenceContainer[index].sentenceContainer.Add(new Sentence("2099-12-12", 0, null));
 
         //var c = new List<string>();
         //c.Add("123");
