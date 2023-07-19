@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Xml.Serialization;
 using static Program;
+using System.Xml.Linq;
 
 public class Program
 {
@@ -531,6 +532,68 @@ public class Program
 
     public static void Main(string[] args)
     {
+        var actualPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "target3.txt");
+        var actualContainer = File.ReadAllLines(actualPath).ToList();
+        actualContainer = actualContainer.Distinct().Select(i => i.ToUpper()).ToList();
+        var valueLine = "";
+
+        foreach (var line in actualContainer)
+        {
+            if (line.Contains("DCDATA"))
+            {
+                var i = line.IndexOf("DCDATA=\"") + "DCDATA=\"".Length;
+                valueLine = line.Substring(i);
+                valueLine = valueLine.TrimEnd('"');
+                break;
+            }
+        }
+
+        var foundContainer = new Dictionary<string, string>();
+        var missingContainer = new Dictionary<string, string>();
+        foreach (var word in valueLine.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var t = word.Split('=', StringSplitOptions.RemoveEmptyEntries);
+            if (t.Length == 2)
+            {
+                if (t[1] == "0" || t[1] == "0.000000")
+                    missingContainer.Add(t[0], t[1]);
+                else
+                    foundContainer.Add(t[0], t[1]);
+            }
+            else
+                missingContainer.Add(t[0], "");
+        }
+
+        var testResultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "testResult3.txt");
+        using (var fs = new FileStream(testResultPath, FileMode.Create))
+        {
+            using (var sw = new StreamWriter(fs))
+            {
+                sw.WriteLine($"totalFound: {foundContainer.Count}");
+                sw.WriteLine($"totalMissing: {missingContainer.Count}");
+
+                sw.WriteLine();
+                sw.WriteLine("-----------------------------------------");
+                sw.WriteLine($"{nameof(foundContainer)}");
+                sw.WriteLine();
+
+                foreach (var item in foundContainer)
+                {
+                    sw.WriteLine(item);
+                }
+
+                sw.WriteLine();
+                sw.WriteLine("-----------------------------------------");
+                sw.WriteLine($"{nameof(missingContainer)}");
+                sw.WriteLine();
+
+                foreach (var item in missingContainer)
+                {
+                    sw.WriteLine(item);
+                }
+            }
+        }
+
         // drawingTargetAreaTopLeft become the new (0,0) of bitmap.
         // So defect's relative coordinate withing bitmap is defect - drawingTargetAreaTopLeft
         // and since drawingTargetArea, itself is shrinked by 1 / zoomScale,
@@ -544,9 +607,9 @@ public class Program
         //var drawingTargetAreaBottomRightY = ImageViewOption.CenterY + drawingTargetAreaHalfHeight;
         //var circumCenterX = (defect.RealX - drawingTargetAreaTopLeftX) * zoomScale;
 
-        var a = $"{(int)Te.None}";
-        Console.WriteLine(a);
-        Console.WriteLine(Te.None);
+        //var a = $"{(int)Te.None}";
+        //Console.WriteLine(a);
+        //Console.WriteLine(Te.None);
         //var index = 0;
         //var parsedFile = new Sentence("FileA", 3, new List<Sentence>());
         //parsedFile.sentenceContainer.Add(new Sentence("Employee", 2, new List<Sentence>()));
