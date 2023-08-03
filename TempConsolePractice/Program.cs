@@ -530,7 +530,7 @@ public class Program
         None = 14,
     }
 
-    public static void Main(string[] args)
+    private void TestTrackout()
     {
         var actualPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "target3.txt");
         var actualContainer = File.ReadAllLines(actualPath).ToList();
@@ -593,6 +593,20 @@ public class Program
                 }
             }
         }
+    }
+
+    public class FooClass
+    { }
+
+    // naming: use fuctnion name Update when it needs to notify after setting the value otherwise use function name set.
+    public static void Main(string[] args)
+    {
+        var a = 12.34;
+
+        if (double.TryParse("-23", out a))
+            Console.WriteLine(a);
+        else
+            Console.WriteLine("failed");
 
         // drawingTargetAreaTopLeft become the new (0,0) of bitmap.
         // So defect's relative coordinate withing bitmap is defect - drawingTargetAreaTopLeft
