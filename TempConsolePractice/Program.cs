@@ -598,7 +598,7 @@ public class Program
     public class FooClass
     { }
 
-    // naming: use fuctnion name Update when it needs to notify after setting the value otherwise use function name set.
+    // naming: use fuctnion name Update when the changed is also applied in other parts of the code(ex. reference, pointer) after setting the value otherwise use function name set.
     public static void Main(string[] args)
     {
         var a = 12.34;
