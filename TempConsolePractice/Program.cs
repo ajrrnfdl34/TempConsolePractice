@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Xml.Serialization;
 using static Program;
 using System.Xml.Linq;
+using System;
 
 public class Program
 {
@@ -597,6 +598,57 @@ public class Program
 
     public class FooClass
     { }
+
+    //private void MouseMoveCommandAction(MouseEventArgs e)
+    //{
+    //    var currentPoint = e.GetPosition(e.Source as System.Windows.Controls.Image);
+    //    SetPosition(currentPoint);
+    //    var isMouseDrag = _prePoint != null && _press;
+    //    if (isMouseDrag)
+    //    {
+    //        // User expects the center of the view to move opposite side of the direction the mouse is being dragged(moving the mouse while holding LMB).
+    //        // This is different with just moving the mouse on screen.
+    //        var x = _prePoint.Value.X - currentPoint.X;
+    //        var y = _prePoint.Value.Y - currentPoint.Y;
+    //        MoveCenter(x, y);
+    //        RefreshImage();
+    //        Messenger.Default.Send(new ChangedMaskMapInfoEvent(_guid, ZoomScale, ImageViewOption.CenterX, ImageViewOption.CenterY, _stkSurface));
+    //    }
+    //    _prePoint = currentPoint;
+    //}
+
+    //private void MoveCenter(double moveX, double moveY)
+    //{
+    //    var zoomScale = GetZoomScale();
+    //    // moveX, moveY is a relative distance within view since the view is 'stretched' to fit the originam bitmap size
+    //    // in perspective of original bitmap which ImageViewOption.Center belongs, it needs to be 'shrunk' if it's zoomed in and vice versa.
+    //    var tempCenterX = ImageViewOption.CenterX + (moveX / zoomScale);
+    //    var tempCenterY = ImageViewOption.CenterY + (moveY / zoomScale);
+    //    //if (!_shotMats.Any())
+    //    //{
+    //    //    ImageViewOption.CenterX = tempCenterX;
+    //    //    ImageViewOption.CenterY = tempCenterY;
+    //    //    return;
+    //    //}
+
+    //    var limitLeft = 0;
+    //    var limitRight = MapData.MaskWidth;
+    //    var limitUpper = 0;
+    //    var limitLower = MapData.MaskHeight;
+    //    if (tempCenterX < limitLeft)
+    //        ImageViewOption.CenterX = limitLeft;
+    //    else if (tempCenterX > limitRight)
+    //        ImageViewOption.CenterX = limitRight;
+    //    else
+    //        ImageViewOption.CenterX = tempCenterX;
+
+    //    if (tempCenterY < limitUpper)
+    //        ImageViewOption.CenterY = limitUpper;
+    //    else if (tempCenterY > limitLower)
+    //        ImageViewOption.CenterY = limitLower;
+    //    else
+    //        ImageViewOption.CenterY = tempCenterY;
+    //}
 
     // naming: use fuctnion name Update when the changed is also applied in other parts of the code(ex. reference, pointer) after setting the value otherwise use function name set.
     public static void Main(string[] args)
