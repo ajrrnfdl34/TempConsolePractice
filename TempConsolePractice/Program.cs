@@ -684,8 +684,8 @@ public class Program
         {
             get
             {
-                return new List<int>(mInstance.container);
-                //return mInstance.container;
+                //return new List<int>(mInstance.container);
+                return mInstance.container;
             }
         }
     }
@@ -712,6 +712,25 @@ public class Program
         foreach (var item in readonlyBar.Container)
         {
             Console.WriteLine(item);
+        }
+        Console.WriteLine();
+
+        IReadOnlyList<Baz> a = new List<Baz>() { new Baz(432) };
+
+        List<Baz> b = a.ToList();
+        b[0].value = 1;
+        b.Add(new Baz(124124));
+
+        foreach (var item in a)
+        {
+            Console.WriteLine(item.value);
+        }
+
+        Console.WriteLine();
+
+        foreach (var item in b)
+        {
+            Console.WriteLine(item.value);
         }
 
         // drawingTargetAreaTopLeft become the new (0,0) of bitmap.
@@ -888,7 +907,7 @@ public class Program
         public int value;
 
         public Foo(int value)
-        { }
+        { this.value = value; }
     }
 
     public struct Figure
@@ -916,6 +935,16 @@ public class Program
         {
             this.x = x;
             this.y = y;
+        }
+    }
+
+    public class Baz
+    {
+        public int value;
+
+        public Baz(int value)
+        {
+            this.value = value;
         }
     }
 
