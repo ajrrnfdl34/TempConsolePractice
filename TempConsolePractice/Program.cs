@@ -674,12 +674,19 @@ public class Program
 
         public ref int Value
         {
-            get { return ref mInstance.value; }
+            get
+            {
+                return ref mInstance.value;
+            }
         }
 
         public List<int> Container
         {
-            get { return mInstance.container; }
+            get
+            {
+                return new List<int>(mInstance.container);
+                //return mInstance.container;
+            }
         }
     }
 
