@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using static Program;
 using System.Xml.Linq;
 using System;
+using System.Security.Claims;
 
 public class Program
 {
@@ -650,15 +651,61 @@ public class Program
     //        ImageViewOption.CenterY = tempCenterY;
     //}
 
+    public class Bar
+    {
+        public int value;
+        public List<int> container;
+
+        public Bar(int value, List<int> container)
+        {
+            this.value = value;
+            this.container = container;
+        }
+    }
+
+    public class ReadonlyBar
+    {
+        private Bar mInstance;
+
+        public ReadonlyBar(Bar instance)
+        {
+            mInstance = instance;
+        }
+
+        public ref int Value
+        {
+            get { return ref mInstance.value; }
+        }
+
+        public List<int> Container
+        {
+            get { return mInstance.container; }
+        }
+    }
+
+    private static void Change(ReadonlyBar readonlyBar)
+    {
+        ref int value = ref readonlyBar.Value;
+        value = 9888;
+
+        var container = readonlyBar.Container;
+        container.Add(999);
+    }
+
     // naming: use fuctnion name Update when the changed is also applied in other parts of the code(ex. reference, pointer) after setting the value otherwise use function name set.
     public static void Main(string[] args)
     {
-        var a = 12.34;
+        var bar = new Bar(14, new List<int>() { 1, 2 });
+        var readonlyBar = new ReadonlyBar(bar);
 
-        if (double.TryParse("-23", out a))
-            Console.WriteLine(a);
-        else
-            Console.WriteLine("failed");
+        Change(readonlyBar);
+
+        Console.WriteLine(bar.value);
+        Console.WriteLine();
+        foreach (var item in readonlyBar.Container)
+        {
+            Console.WriteLine(item);
+        }
 
         // drawingTargetAreaTopLeft become the new (0,0) of bitmap.
         // So defect's relative coordinate withing bitmap is defect - drawingTargetAreaTopLeft
